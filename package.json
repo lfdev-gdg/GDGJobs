@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
-    "@supabase/supabase-js": "^2.49.1",
+    "@supabase/supabase-js": "^2.112.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "firebase": "^11.2.0",
+    "firebase": "^11.10.0",
     "lucide-react": "^0.469.0",
     "next": "^15.1.6",
     "react": "^19.0.0",
