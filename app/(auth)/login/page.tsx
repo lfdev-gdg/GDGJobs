@@ -11,10 +11,19 @@
 'use client';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
-export default function LoginPage() {
+function LoginSpinner() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-8 h-8 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
+    </div>
+  );
+}
+
+function LoginForm() {
   const { user, isLoading, isAuthenticated, error, loginWithGoogle } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,11 +37,7 @@ export default function LoginPage() {
   }, [isAuthenticated, user, redirectTo, router]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <div className="w-8 h-8 border-2 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
-      </div>
-    );
+    return <LoginSpinner />;
   }
 
   return (
@@ -81,11 +86,19 @@ export default function LoginPage() {
         </button>
 
         <div className="mt-6 text-center">
-          <a href="/" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
+          <Link href="/" className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
             ← Voltar para a home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginSpinner />}>
+      <LoginForm />
+    </Suspense>
   );
 }
