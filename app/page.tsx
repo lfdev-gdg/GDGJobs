@@ -19,6 +19,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -255,8 +256,18 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════════════
           HERO
          ════════════════════════════════════════════════════ */}
-      <section className="relative pt-16 pb-20 md:pt-24 md:pb-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <section className="relative pt-16 pb-20 md:pt-24 md:pb-28 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-community.jpg"
+            alt=""
+            fill
+            priority
+            className="object-cover object-[50%_35%]"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.75)_55%,rgba(255,255,255,0.35)_100%)]" />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
             Sua próxima oportunidade em tecnologia pode estar aqui.
           </h1>

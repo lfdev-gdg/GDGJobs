@@ -40,7 +40,7 @@ export function LoginForm() {
 
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-          {error}
+          {error.message || 'Ocorreu um erro durante o login. Tente novamente.'}
         </div>
       )}
 

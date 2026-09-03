@@ -22,26 +22,9 @@ import {
   User,
 } from 'firebase/auth';
 
-// Validação: garante que todas as variáveis estão definidas
-const requiredEnvVars = [
-  'NEXT_PUBLIC_FIREBASE_API_KEY',
-  'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
-  'NEXT_PUBLIC_FIREBASE_PROJECT_ID',
-  'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET',
-  'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
-  'NEXT_PUBLIC_FIREBASE_APP_ID',
-];
-
-for (const key of requiredEnvVars) {
-  if (!process.env[key]) {
-    throw new Error(
-      `[Firebase Config] Variável de ambiente ausente: ${key}\n` +
-        `Verifique se o arquivo .env.local está criado e preenchido.\n` +
-        `Copie de: cp .env.example .env.local`,
-    );
-  }
-}
-
+// Acessos literais a process.env.NEXT_PUBLIC_* — só assim o Next.js consegue
+// inlinar os valores no bundle do navegador. process.env[key] dinâmico não é
+// substituído em build time e sempre resulta em undefined no client.
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -51,6 +34,26 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || undefined,
 };
+
+// Validação: garante que todas as variáveis obrigatórias estão definidas
+const requiredKeys = [
+  ['apiKey', 'NEXT_PUBLIC_FIREBASE_API_KEY'],
+  ['authDomain', 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'],
+  ['projectId', 'NEXT_PUBLIC_FIREBASE_PROJECT_ID'],
+  ['storageBucket', 'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET'],
+  ['messagingSenderId', 'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID'],
+  ['appId', 'NEXT_PUBLIC_FIREBASE_APP_ID'],
+] as const;
+
+for (const [configKey, envName] of requiredKeys) {
+  if (!firebaseConfig[configKey]) {
+    throw new Error(
+      `[Firebase Config] Variável de ambiente ausente: ${envName}\n` +
+        `Verifique se o arquivo .env.local está criado e preenchido.\n` +
+        `Copie de: cp .env.example .env.local`,
+    );
+  }
+}
 
 // Singleton: evita re-inicialização no hot reload do Next.js
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
