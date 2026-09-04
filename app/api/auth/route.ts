@@ -1,7 +1,5 @@
 export async function GET() {
   return Response.json({
-    message: 'Rotina de autenticação reservada para futura implementação.',
+    message: 'Ver /api/auth/session para criação/remoção do cookie de sessão.',
   });
 }
-
-// TODO: integrar Firebase Auth e providers de sessão.
