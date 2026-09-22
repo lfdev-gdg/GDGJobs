@@ -18,15 +18,18 @@ interface JobsPageProps {
 
 export default async function JobsPage({ searchParams }: JobsPageProps) {
   const filters = await searchParams;
-  const page = Number(filters.page) > 0 ? Number(filters.page) : 1;
+  const requestedPage = Number(filters.page) > 0 ? Number(filters.page) : 1;
 
-  // Busca vagas filtradas e paginadas no lado do servidor
-  const { jobs, totalCount, totalPages, pageSize } = await getJobs({
+  // Busca vagas filtradas e paginadas no lado do servidor. getJobs pode
+  // "grampear" a página pedida (ex: ?page=999 quando só há 2 páginas) —
+  // por isso usamos o `page` que ela devolve, não o requestedPage da URL,
+  // para o indicador de paginação nunca mostrar um número inconsistente.
+  const { jobs, page, totalCount, totalPages, pageSize } = await getJobs({
     search: filters.search,
     modality: filters.modality,
     seniority: filters.seniority,
     tech: filters.tech,
-    page,
+    page: requestedPage,
   });
 
   return (
