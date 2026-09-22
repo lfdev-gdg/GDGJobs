@@ -7,8 +7,8 @@
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 function LoginSpinner() {
   return (
@@ -23,22 +23,23 @@ function LoginForm() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect') || '/dashboard';
 
-  // Função centralizada para redirecionar
-  const doRedirect = () => {
+  // Função centralizada para redirecionar. useCallback garante uma
+  // referência estável para o useEffect abaixo poder declará-la como
+  // dependência sem re-disparar em todo re-render.
+  const doRedirect = useCallback(() => {
     // Redirecionamento de nível de página garante a saída imediata da tela de login
     window.location.assign(redirectTo);
-  };
+  }, [redirectTo]);
 
   // Redireciona caso o usuário já chegue logado na página
   useEffect(() => {
     if (!isLoading && isAuthenticated && user) {
       doRedirect();
     }
-  }, [isLoading, isAuthenticated, user, redirectTo, router]);
+  }, [isLoading, isAuthenticated, user, doRedirect]);
 
   const handleGoogleLogin = async () => {
     try {

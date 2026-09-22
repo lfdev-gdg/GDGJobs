@@ -1,8 +1,13 @@
 import { notFound } from 'next/navigation';
 import { getJobById } from '@/features/jobs/server/get-jobs';
 
-export default async function JobDetailPage({ params }: { params: { id: string } }) {
-  const job = await getJobById(params.id);
+interface JobDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function JobDetailPage({ params }: JobDetailPageProps) {
+  const { id } = await params;
+  const job = await getJobById(id);
 
   if (!job) {
     notFound();
