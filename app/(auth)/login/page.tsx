@@ -48,18 +48,27 @@ function LoginForm() {
 
       // Redirecionamento imediato assim que a Promise do Firebase resolve
       doRedirect();
-    } catch (err: any) {
-      if (err?.code === 'auth/popup-closed-by-user') {
-        setLocalError('O popup de login foi fechado antes de concluir.');
-      } else if (err?.code === 'auth/popup-blocked') {
-        setLocalError('O navegador bloqueou o popup. Permita popups para este site.');
+    } catch (err: unknown) {
+      // Verifica se 'err' é um objeto que contém a propriedade 'code'
+      if (err && typeof err === 'object' && 'code' in err) {
+        // Cast temporário seguro para acessar as propriedades
+        const firebaseError = err as { code: string; message?: string };
+
+        if (firebaseError.code === 'auth/popup-closed-by-user') {
+          setLocalError('O popup de login foi fechado antes de concluir.');
+        } else if (firebaseError.code === 'auth/popup-blocked') {
+          setLocalError('O navegador bloqueou o popup. Permita popups para este site.');
+        } else {
+          setLocalError(firebaseError.message || 'Erro ao realizar login. Tente novamente.');
+        }
       } else {
-        setLocalError(err?.message || 'Erro ao realizar login. Tente novamente.');
+        // Trata erros genéricos que não vieram do Firebase (ex: erro de rede bruto)
+        setLocalError('Ocorreu um erro inesperado. Tente novamente.');
       }
+    } finally {
       setIsLoggingIn(false);
     }
   };
-
   if (isLoading || (isAuthenticated && user)) {
     return <LoginSpinner />;
   }
