@@ -16,7 +16,12 @@ import type { JobFilters } from '@/features/jobs/types';
 import type { AiProfileExtraction } from '@/features/profile/types';
 
 const apiKey = process.env.GEMINI_API_KEY;
-const MODEL_NAME = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
+// gemini-2.0-flash foi descontinuado pelo Google ("no longer available",
+// 404) — achei isso testando de verdade com uma chave real. gemini-3.6-
+// flash é o modelo que a própria API recomendou na mensagem de erro, e
+// validei os dois fluxos (busca de vagas e extração de perfil) contra
+// ele antes de trocar o default.
+const MODEL_NAME = process.env.GEMINI_MODEL ?? 'gemini-3.6-flash';
 
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
