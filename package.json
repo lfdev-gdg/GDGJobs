@@ -10,8 +10,9 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:migrate": "echo 'TODO: executar migrations do Supabase ou SQL local' && exit 0",
-    "db:seed": "echo 'TODO: rodar seeds de desenvolvimento' && exit 0",
+    "db:migrate:local": "docker compose up -d postgres && for f in packages/database/migrations/*.sql; do echo \"-- applying $f\"; docker exec -i gdg-jobs-postgres psql -U postgres -d postgres -v ON_ERROR_STOP=1 < \"$f\" || exit 1; done",
+    "db:migrate": "echo 'Sem Supabase CLI linkado neste ambiente. Veja packages/database/README.md — SQL Editor do dashboard ou `supabase db push`. Para validar localmente: npm run db:migrate:local' && exit 0",
+    "db:seed": "docker exec -i gdg-jobs-postgres psql -U postgres -d postgres -v ON_ERROR_STOP=1 < packages/database/seeds/jobs.sql",
     "shadcn:init": "npx shadcn@latest init"
   },
   "dependencies": {
