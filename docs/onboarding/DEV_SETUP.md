@@ -110,3 +110,7 @@ npm install
 - Definir o primeiro conjunto de componentes do design system
 - Iniciar as migrations do banco
 - Planejar a integração com Supabase e Firebase
+
+## PS: problemas ao limpar cache
+
+rm -rf .next

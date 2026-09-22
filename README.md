@@ -9,6 +9,12 @@ GDG Jobs é o hub de vagas curado pela comunidade GDG para a comunidade de tecno
 ![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28)
 ![Gemini](https://img.shields.io/badge/Gemini-AI-8B5CF6)
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/lfdev-gdg/GDGJobs)
+
+> Enquanto o `.devcontainer/` ainda não estiver em `main`, use **Code →
+> Codespaces → "..." → New with options** e selecione a branch atual em vez
+> do botão acima.
+
 ## Visão geral
 
 Este repositório organiza a estrutura inicial do produto, com foco em:

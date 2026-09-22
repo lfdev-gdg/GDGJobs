@@ -28,4 +28,26 @@ jobs:
         run: npm run type-check
 
       - name: Build
-        run: npm run build
+        # O build executa (não só compila) o código server-side pra coletar
+        # dados de cada rota — lib/supabase.ts e lib/firebase-admin.ts
+        # inicializam seus clientes no carregamento do módulo, então
+        # falham se as env vars estiverem ausentes, mesmo sem nenhuma
+        # chamada de rede real acontecer. Não há segredo de verdade aqui:
+        # são valores fake só pra passar da inicialização; a "chave
+        # privada" do Firebase Admin é gerada na hora (não pode ser um
+        # texto fixo: cert() do firebase-admin valida o PEM via OpenSSL
+        # antes mesmo de qualquer request).
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          NEXT_PUBLIC_FIREBASE_API_KEY: placeholder-api-key
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: placeholder.firebaseapp.com
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: placeholder-project
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: placeholder.appspot.com
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: '000000000000'
+          NEXT_PUBLIC_FIREBASE_APP_ID: '1:000000000000:web:0000000000000000000000'
+          FIREBASE_PROJECT_ID: placeholder-project
+          FIREBASE_CLIENT_EMAIL: firebase-adminsdk-ci@placeholder-project.iam.gserviceaccount.com
+        run: |
+          export FIREBASE_PRIVATE_KEY="$(openssl genrsa 2048 2>/dev/null | awk 'BEGIN{ORS="\\n"}{print}')"
+          npm run build

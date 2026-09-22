@@ -1,0 +1,48 @@
+{
+  "name": "GDG Jobs — Workshop",
+  // Carrega o docker-compose.yml da raiz (serviço "postgres", pgvector) +
+  // o extend.yml deste diretório (serviço "app", onde o VS Code roda).
+  // É esse arquivo que o GitHub detecta para habilitar Codespaces no repo.
+  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.extend.yml"],
+  "service": "app",
+  "workspaceFolder": "/workspaces/gdgjobs",
+  "shutdownAction": "stopCompose",
+
+  "forwardPorts": [3000, 5432],
+  "portsAttributes": {
+    "3000": {
+      "label": "GDG Jobs (Next.js)",
+      "onAutoForward": "openPreview"
+    },
+    "5432": {
+      "label": "Postgres (pgvector)",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "editorconfig.editorconfig",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "tailwindCSS.includeLanguages": {
+          "plaintext": "html"
+        }
+      }
+    }
+  },
+
+  "remoteUser": "node"
+}

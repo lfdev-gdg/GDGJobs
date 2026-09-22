@@ -1,0 +1,25 @@
+# Serviço extra para o Codespace/Dev Container. Não substitui o
+# docker-compose.yml da raiz — devcontainer.json carrega os dois juntos,
+# então o serviço "postgres" (pgvector) já definido lá continua sendo a
+# mesma fonte usada em desenvolvimento local fora do Codespace.
+services:
+  app:
+    build:
+      # Ao combinar múltiplos -f, o Compose resolve caminhos relativos com
+      # base no diretório do PRIMEIRO arquivo (docker-compose.yml da raiz),
+      # não no diretório deste próprio arquivo — por isso "." aqui já é a
+      # raiz do repo, não .devcontainer/.
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      # Bind mount do repo inteiro (mesma ressalva do context acima: "."
+      # já é a raiz do repo aqui) — editar no VS Code do Codespace edita o
+      # mesmo arquivo que roda dentro do container.
+      - .:/workspaces/gdgjobs:cached
+    command: sleep infinity
+    depends_on:
+      - postgres
+    environment:
+      # Dentro da rede do compose, o Postgres é alcançado pelo nome do
+      # serviço ("postgres"), não por localhost.
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres
