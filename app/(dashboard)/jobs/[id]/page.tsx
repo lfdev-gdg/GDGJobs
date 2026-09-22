@@ -1,5 +1,9 @@
 import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { getJobById } from '@/features/jobs/server/get-jobs';
+import { getApplicationForUser } from '@/features/applications/server/applications';
+import { ApplyButton } from '@/features/applications/components/ApplyButton';
+import { getOptionalAuthenticatedUser, SESSION_COOKIE_NAME } from '@/lib/auth-server';
 
 interface JobDetailPageProps {
   params: Promise<{ id: string }>;
@@ -13,24 +17,37 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
     notFound();
   }
 
+  // /jobs/[id] é pública (visitante não-logado também vê a vaga) — por
+  // isso a versão "optional" aqui: sabemos se tem usuário sem forçar login.
+  const cookieStore = await cookies();
+  const user = await getOptionalAuthenticatedUser(cookieStore.get(SESSION_COOKIE_NAME)?.value);
+  const existingApplication = user ? await getApplicationForUser(job.id, user.id) : null;
+
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <div className="flex justify-between items-start mb-4">
+        <div className="flex justify-between items-start mb-4 gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{job.title}</h1>
             <p className="text-lg text-gray-600">
               {job.company_name} • {job.location}
             </p>
           </div>
-          <a
-            href={job.application_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Candidatar-se
-          </a>
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            <ApplyButton
+              jobId={job.id}
+              isAuthenticated={!!user}
+              initialHasApplied={!!existingApplication}
+            />
+            <a
+              href={job.application_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-gray-500 hover:text-gray-700 underline"
+            >
+              Ver vaga original ↗
+            </a>
+          </div>
         </div>
 
         <div className="flex gap-2 my-4">
