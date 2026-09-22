@@ -3,6 +3,7 @@ import { getJobs } from '@/features/jobs/server/get-jobs';
 import { JobList } from '@/features/jobs/components/JobList';
 import { JobFilters } from '@/features/jobs/components/JobFilters';
 import { Pagination } from '@/features/jobs/components/Pagination';
+import { AiSearchBar } from '@/features/jobs/components/AiSearchBar';
 import { JobModality, SeniorityLevel } from '@/features/jobs/types';
 
 interface JobsPageProps {
@@ -36,6 +37,11 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
           Encontre e filtre vagas curadas pelo GDG Lauro de Freitas.
         </p>
       </div>
+
+      {/* Busca em linguagem natural via IA (Gemini) */}
+      <Suspense fallback={<div className="h-14 bg-gray-100 rounded-lg animate-pulse mb-4" />}>
+        <AiSearchBar />
+      </Suspense>
 
       {/* Componente Client-Side para manipular os filtros de busca */}
       <Suspense fallback={<div className="h-32 bg-gray-100 rounded-lg animate-pulse mb-6" />}>
