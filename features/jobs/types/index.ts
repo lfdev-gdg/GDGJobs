@@ -23,4 +23,13 @@ export interface JobFilters {
   modality?: JobModality | 'ALL';
   seniority?: SeniorityLevel | 'ALL';
   tech?: string;
+  page?: number;
+}
+
+export interface PaginatedJobs {
+  jobs: Job[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 }

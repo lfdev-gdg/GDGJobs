@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { getJobs } from '@/features/jobs/server/get-jobs';
 import { JobList } from '@/features/jobs/components/JobList';
 import { JobFilters } from '@/features/jobs/components/JobFilters';
+import { Pagination } from '@/features/jobs/components/Pagination';
 import { JobModality, SeniorityLevel } from '@/features/jobs/types';
 
 interface JobsPageProps {
@@ -10,18 +11,21 @@ interface JobsPageProps {
     modality?: JobModality | 'ALL';
     seniority?: SeniorityLevel | 'ALL';
     tech?: string;
+    page?: string;
   }>;
 }
 
 export default async function JobsPage({ searchParams }: JobsPageProps) {
   const filters = await searchParams;
+  const page = Number(filters.page) > 0 ? Number(filters.page) : 1;
 
-  // Busca vagas filtradas no lado do servidor
-  const jobs = await getJobs({
+  // Busca vagas filtradas e paginadas no lado do servidor
+  const { jobs, totalCount, totalPages, pageSize } = await getJobs({
     search: filters.search,
     modality: filters.modality,
     seniority: filters.seniority,
     tech: filters.tech,
+    page,
   });
 
   return (
@@ -40,6 +44,19 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
 
       {/* Lista das vagas retornadas */}
       <JobList jobs={jobs} />
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        pageSize={pageSize}
+        searchParams={{
+          search: filters.search,
+          modality: filters.modality,
+          seniority: filters.seniority,
+          tech: filters.tech,
+        }}
+      />
     </main>
   );
 }
