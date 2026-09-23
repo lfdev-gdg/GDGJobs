@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "db:migrate:local": "docker compose up -d postgres --wait && docker exec -i gdg-jobs-postgres psql -U postgres -d postgres -v ON_ERROR_STOP=1 -c \"CREATE SCHEMA IF NOT EXISTS auth; CREATE OR REPLACE FUNCTION auth.uid() RETURNS uuid AS \\$\\$ SELECT NULL::uuid \\$\\$ LANGUAGE sql STABLE;\" && for f in packages/database/migrations/*.sql; do echo \"-- applying $f\"; docker exec -i gdg-jobs-postgres psql -U postgres -d postgres -v ON_ERROR_STOP=1 < \"$f\" || exit 1; done",
+    "db:migrate:local": "bash scripts/db-migrate-local.sh",
     "db:migrate": "echo 'Sem Supabase CLI linkado neste ambiente. Veja packages/database/README.md — SQL Editor do dashboard ou `supabase db push`. Para validar localmente: npm run db:migrate:local' && exit 0",
     "db:seed": "docker exec -i gdg-jobs-postgres psql -U postgres -d postgres -v ON_ERROR_STOP=1 < packages/database/seeds/jobs.sql",
     "shadcn:init": "npx shadcn@latest init"
