@@ -7,6 +7,8 @@ import { useToast } from '@/components/ui/toaster';
 
 interface ApplyButtonProps {
   jobId: string;
+  /** URL da vaga original — abre numa aba nova no mesmo clique que registra a candidatura. */
+  applicationUrl: string;
   isAuthenticated: boolean;
   /** Candidatura já existente pra essa vaga, resolvida no server (job detail page). */
   initialHasApplied: boolean;
@@ -15,15 +17,20 @@ interface ApplyButtonProps {
 /**
  * Botão de candidatura 1-click. Três estados possíveis:
  *   1. Não autenticado -> vira link pro login (volta pra essa vaga depois)
- *   2. Já candidatado   -> badge fixo "Candidatura enviada", não clicável
- *   3. Pendente         -> botão clicável que registra a candidatura
+ *   2. Já candidatado   -> badge fixo "Candidatura enviada" + link pra reabrir a vaga original
+ *   3. Pendente         -> botão que registra a candidatura E abre a vaga original, no mesmo clique
  *
  * UI otimista: ao clicar, já mostra "enviada" antes da resposta do
  * servidor chegar. Se der erro, volta pro estado anterior — a prevenção
  * de duplicados de verdade é a UNIQUE (job_id, user_id) no banco (ver
  * features/applications/server/applications.ts), isso aqui é só UX.
  */
-export function ApplyButton({ jobId, isAuthenticated, initialHasApplied }: ApplyButtonProps) {
+export function ApplyButton({
+  jobId,
+  applicationUrl,
+  isAuthenticated,
+  initialHasApplied,
+}: ApplyButtonProps) {
   const { showToast } = useToast();
   const [hasApplied, setHasApplied] = useState(initialHasApplied);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,40 +49,62 @@ export function ApplyButton({ jobId, isAuthenticated, initialHasApplied }: Apply
 
   if (hasApplied) {
     return (
-      <span className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold px-4 py-2 rounded-md cursor-default">
-        <CheckCircle2 className="w-4 h-4" />
-        Candidatura enviada
-      </span>
+      <div className="flex flex-col items-end gap-1">
+        <span className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold px-4 py-2 rounded-md cursor-default">
+          <CheckCircle2 className="w-4 h-4" />
+          Candidatura enviada
+        </span>
+        <a
+          href={applicationUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-gray-500 hover:text-gray-700 underline"
+        >
+          Ver vaga original ↗
+        </a>
+      </div>
     );
   }
 
-  const handleApply = async () => {
+  const handleApply = () => {
     if (isSubmitting) return;
+
+    // Abre a vaga original JÁ, de forma síncrona: depois de um `await`, o
+    // navegador não considera mais isso "gesto direto do usuário" e
+    // bloqueia o popup. Por isso window.open vem antes do fetch, não
+    // dentro do .then().
+    const externalTab = window.open(applicationUrl, '_blank', 'noopener,noreferrer');
+    if (!externalTab) {
+      showToast(
+        'Não conseguimos abrir a vaga original automaticamente (popup bloqueado). Permita popups para este site.',
+        'error',
+      );
+    }
 
     setIsSubmitting(true);
     setHasApplied(true); // otimista
 
-    try {
-      const response = await fetch('/api/applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ job_id: jobId }),
+    fetch('/api/applications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ job_id: jobId }),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          setHasApplied(false); // reverte a UI otimista
+          showToast(body.error ?? 'Não foi possível registrar a candidatura.', 'error');
+          return;
+        }
+        showToast('Candidatura enviada! A vaga original abriu em outra aba.', 'success');
+      })
+      .catch(() => {
+        setHasApplied(false);
+        showToast('Erro de conexão ao registrar a candidatura. Tente novamente.', 'error');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
-
-      if (!response.ok) {
-        const body = await response.json().catch(() => ({}));
-        setHasApplied(false); // reverte a UI otimista
-        showToast(body.error ?? 'Não foi possível enviar a candidatura.', 'error');
-        return;
-      }
-
-      showToast('Candidatura enviada!', 'success');
-    } catch {
-      setHasApplied(false);
-      showToast('Erro de conexão ao enviar a candidatura. Tente novamente.', 'error');
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   return (

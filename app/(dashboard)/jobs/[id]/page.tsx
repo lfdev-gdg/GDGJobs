@@ -33,20 +33,13 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
               {job.company_name} • {job.location}
             </p>
           </div>
-          <div className="flex flex-col items-end gap-2 shrink-0">
+          <div className="shrink-0">
             <ApplyButton
               jobId={job.id}
+              applicationUrl={job.application_url}
               isAuthenticated={!!user}
               initialHasApplied={!!existingApplication}
             />
-            <a
-              href={job.application_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-gray-500 hover:text-gray-700 underline"
-            >
-              Ver vaga original ↗
-            </a>
           </div>
         </div>
 
