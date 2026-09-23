@@ -47,12 +47,35 @@ psql postgresql://postgres:postgres@localhost:5432/postgres
 
 ## 5) Rodar migrations e seeds
 
+Sempre nessa ordem — o seed insere linhas na tabela `jobs`, que só existe depois que as
+migrations rodarem:
+
 ```bash
-npm run db:migrate
-npm run db:seed
+npm run db:migrate:local   # sobe o Postgres local, cria os roles (anon/authenticated/service_role)
+                            # e aplica packages/database/migrations/001→004 em ordem
+npm run db:seed            # popula packages/database/seeds/jobs.sql (vagas de exemplo)
 ```
 
-> TODO: substituir pelos scripts reais de migration e seed do projeto.
+> `npm run db:migrate` (sem `:local`) não toca no Postgres local — ele só imprime um lembrete de
+> como aplicar as migrations no Supabase real (SQL Editor do dashboard, ou `supabase db push`).
+> Pra desenvolvimento local o comando é sempre `db:migrate:local`.
+
+### Adicionando novas vagas ao seed
+
+Pra incluir mais vagas de exemplo (ex: cobrir uma área de tecnologia que ainda não tem vaga
+suficiente pra testar), edite `packages/database/seeds/jobs.sql` adicionando mais linhas num
+`INSERT INTO public.jobs (...) VALUES (...)` — **não crie uma migration nova pra isso**, é só
+dado de seed, o schema da tabela não muda.
+
+`db:seed` não é idempotente (não tem `ON CONFLICT`): rodar duas vezes duplica as vagas que já
+existiam. Se seu Postgres local já tinha sido semeado antes e você quer recomeçar do zero com o
+seed atualizado, apague o volume primeiro:
+
+```bash
+docker compose down -v     # apaga o container e o volume do Postgres local
+npm run db:migrate:local
+npm run db:seed
+```
 
 ## 6) Iniciar o app
 

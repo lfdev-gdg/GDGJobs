@@ -440,3 +440,260 @@ INSERT INTO public.jobs (
   ],
   'https://br.linkedin.com/jobs/view/staff-software-engineer-at-stix-4443773744'
 );
+
+-- ============================================================
+-- COBERTURA POR ÁREA DE TECNOLOGIA (Mobile, Data, DevOps/SRE, QA)
+-- Adicionado em: 23/09/2026 — vagas reais e ativas no Gupy,
+-- garantindo pelo menos 2 vagas por área pra testar filtros/matching.
+-- ============================================================
+
+INSERT INTO public.jobs (
+  title,
+  company_name,
+  company_logo_url,
+  location,
+  modality,
+  seniority,
+  description,
+  requirements,
+  technologies,
+  application_url
+) VALUES
+
+-- ---------- MOBILE ----------
+
+(
+  'React Native Desenvolvedor Mobile | Senior (Remote)',
+  'Compass UOL',
+  'https://www.google.com/s2/favicons?domain=compass.uol.com.br&sz=128',
+  'Brasil',
+  'REMOTE',
+  'SENIOR',
+  'Vaga para desenvolvedor mobile sênior atuando com React Native, responsável por colaborar na arquitetura e desenvolvimento de funcionalidades de alta disponibilidade do aplicativo, com foco em qualidade (testes unitários, SonarQube) em ambiente ágil e multidisciplinar.',
+  ARRAY[
+    'Experiência com React Native, Kotlin (Android) ou Swift (iOS)',
+    'Experiência com desenvolvimento frontend em React',
+    'Experiência com bancos de dados SQL e NoSQL',
+    'Experiência em DevOps: pipelines CI/CD, code review, análise estática',
+    'Conhecimento em arquitetura MVVM/MVI e Clean Architecture',
+    'Conhecimento em testes (JUnit/MockK/Turbine, Espresso/Compose Testing)'
+  ],
+  ARRAY[
+    'React Native',
+    'Kotlin',
+    'Swift',
+    'React',
+    'SonarQube',
+    'AWS',
+    'Kafka',
+    'GitHub Actions'
+  ],
+  'https://compass.gupy.io/jobs/11358834'
+),
+
+(
+  'Desenvolvedor Mobile Android - Senior',
+  'FCamara',
+  'https://www.google.com/s2/favicons?domain=fcamara.com.br&sz=128',
+  'São Paulo, SP',
+  'HYBRID',
+  'SENIOR',
+  'Desenvolvedor Android sênior para atuar em aplicações com milhões de usuários, participando de decisões técnicas de arquitetura, ferramentas e processos junto a designer, PO e cientista de dados, com foco em performance, revisão de pull requests e acompanhamento de crashes em produção.',
+  ARRAY[
+    'Kotlin avançado (coroutines, Flow, sealed classes)',
+    'Android SDK profundo e domínio de Jetpack (Compose, Navigation, Room, WorkManager)',
+    'Arquiteturas MVVM/Clean Architecture e injeção de dependência (Hilt/Dagger)',
+    'Consumo de APIs REST (Retrofit/OkHttp) e serialização',
+    'Testes unitários e instrumentados (JUnit, MockK, Espresso, Compose Testing)',
+    'CI/CD e publicação na Google Play Console'
+  ],
+  ARRAY[
+    'Kotlin',
+    'Jetpack Compose',
+    'Room',
+    'Retrofit',
+    'Hilt',
+    'Dagger',
+    'JUnit',
+    'Espresso',
+    'GitHub Actions'
+  ],
+  'https://fcamara.gupy.io/jobs/11365891'
+),
+
+-- ---------- DATA / ANALYTICS ----------
+
+(
+  'Engenheiro de Dados Sr',
+  'Ipiranga',
+  'https://www.google.com/s2/favicons?domain=ipiranga.com.br&sz=128',
+  'Porto Alegre, RS',
+  'HYBRID',
+  'SENIOR',
+  'Vaga para engenheiro(a) de dados sênior responsável pela concepção, desenvolvimento e evolução de soluções de dados em ambiente Cloud Azure, usando Databricks como plataforma principal de processamento analítico, incluindo construção de pipelines escaláveis, governança de dados e apoio a iniciativas de Analytics e IA.',
+  ARRAY[
+    'Experiência sólida como Engenheiro de Dados Sênior em ambientes corporativos',
+    'Experiência comprovada com Microsoft Azure e Azure Databricks avançado',
+    'Experiência com arquitetura Data Lake e Lakehouse',
+    'Python, PySpark e SQL avançados',
+    'Experiência em projetos de Analytics, Big Data e Modern Data Platform',
+    'Conhecimento em DevOps/CI-CD para dados e modelagem dimensional'
+  ],
+  ARRAY[
+    'Azure',
+    'Databricks',
+    'Python',
+    'PySpark',
+    'SQL',
+    'Delta Lake',
+    'Power BI',
+    'Terraform',
+    'Kafka'
+  ],
+  'https://ipiranga.gupy.io/job/eyJqb2JJZCI6MTI0MjE3MTUsInNvdXJjZSI6Imd1cHlfcG9ydGFsIn0='
+),
+
+(
+  'Analytics Engineer Sênior (DATA & AI)',
+  'Grupo Casas Bahia',
+  'https://www.google.com/s2/favicons?domain=casasbahia.com.br&sz=128',
+  'São Paulo, SP',
+  'HYBRID',
+  'SENIOR',
+  'Profissional responsável por desenvolver, estruturar e evoluir soluções analíticas avançadas de Inteligência Artificial, traduzindo necessidades de negócio em modelos, dados e produtos analíticos escaláveis, atuando embarcado em squads de negócio como referência técnica sênior em analytics.',
+  ARRAY[
+    'Domínio de Python e SQL para análise e processamento de dados',
+    'Conhecimento sólido em estatística e Machine Learning',
+    'Experiência em construção de pipelines de dados (ETL/ELT)',
+    'Vivência com plataformas de Cloud (Azure, AWS ou GCP)',
+    'Experiência com MLOps, DataOps, versionamento e deploy de modelos',
+    'Conhecimento em integração de sistemas e APIs'
+  ],
+  ARRAY[
+    'Python',
+    'SQL',
+    'Machine Learning',
+    'Azure',
+    'AWS',
+    'GCP',
+    'Power BI',
+    'Tableau',
+    'LLMs'
+  ],
+  'https://tecnologiagrupocasasbahia.gupy.io/jobs/11592446'
+),
+
+-- ---------- DEVOPS / SRE ----------
+
+(
+  'Site Reliability Engineer (SRE) | AWS | Kubernetes | Databricks | Sênior (Remote)',
+  'Compass UOL',
+  'https://www.google.com/s2/favicons?domain=compass.uol.com.br&sz=128',
+  'Brasil',
+  'REMOTE',
+  'SENIOR',
+  'SRE sênior responsável por garantir confiabilidade, disponibilidade e desempenho de sistemas em produção, administrando ambientes Kubernetes, respondendo a incidentes críticos com RCA, e gerenciando pipelines de CI/CD e infraestrutura como código.',
+  ARRAY[
+    'Experiência sólida como SRE, DevOps Engineer ou Platform Engineer',
+    'Vivência em administração de Kubernetes em produção',
+    'Experiência com infraestrutura em cloud, preferencialmente AWS',
+    'Automação de infraestrutura com Terraform/IaC',
+    'Experiência com Databricks e Apache Spark',
+    'Conhecimento em SQL, Data Warehouse e modelagem de dados'
+  ],
+  ARRAY[
+    'AWS',
+    'Kubernetes',
+    'Terraform',
+    'Databricks',
+    'Apache Spark',
+    'Amazon EC2',
+    'Amazon S3',
+    'AWS Lambda'
+  ],
+  'https://compass.gupy.io/jobs/11880163'
+),
+
+(
+  'Site Reliability Engineer (SRE)',
+  'Attus',
+  'https://www.google.com/s2/favicons?domain=attus.com.br&sz=128',
+  'Brasil',
+  'REMOTE',
+  'SENIOR',
+  'SRE responsável por estabelecer e evoluir práticas de confiabilidade em empresa de tecnologia jurídica, desde observabilidade e SLOs até resposta a incidentes e automação, tratando operação como engenharia e aplicando IA para reduzir trabalho manual (AIOps).',
+  ARRAY[
+    'Experiência com observabilidade (Grafana, Prometheus, Elastic, Dynatrace)',
+    'Experiência com Kubernetes e containers (Docker)',
+    'Conhecimento em Linux e redes (HTTP, DNS, TLS/SSL)',
+    'Conhecimento em scripts e automação (Shell, Python)',
+    'Uso de IA aplicada à operação (AIOps)',
+    'Diferencial: IaC (Terraform, Ansible) e Chaos Engineering'
+  ],
+  ARRAY[
+    'Grafana',
+    'Prometheus',
+    'Elastic',
+    'Kubernetes',
+    'Docker',
+    'Linux',
+    'Python',
+    'Terraform',
+    'Redis'
+  ],
+  'https://attus.gupy.io/jobs/11444982'
+),
+
+-- ---------- QA / TESTES ----------
+
+(
+  'Analista de Testes (QA) Senior',
+  'Ituran',
+  'https://www.google.com/s2/favicons?domain=ituran.com.br&sz=128',
+  'Rio de Janeiro, RJ',
+  'HYBRID',
+  'SENIOR',
+  'Profissional responsável por definir a estratégia e arquitetura de testes automatizados e conduzir a transição dos testes manuais para automação, integrando qualidade ao pipeline de CI/CD e escalando a capacidade da área de QA para todas as squads de desenvolvimento.',
+  ARRAY[
+    'Arquitetura de automação de testes (Page Object, modularização) com Playwright',
+    'CI/CD para testes em Azure DevOps, GitHub Actions ou similar',
+    'Ambientes de teste em containers (Docker) com estratégia de banco reproduzível',
+    'Estratégia de testes (pirâmide, integração, regressão) e definição de quality gates',
+    'SQL avançado, análise de resultados e métricas de cobertura',
+    '5+ anos de experiência com QA, automação e liderança técnica/mentoria'
+  ],
+  ARRAY[
+    'Playwright',
+    'Azure DevOps',
+    'GitHub Actions',
+    'Docker',
+    'SQL'
+  ],
+  'https://vagasituran.gupy.io/jobs/12197211'
+),
+
+(
+  'Analista de QA Sênior',
+  'Claranet',
+  'https://www.google.com/s2/favicons?domain=claranet.com.br&sz=128',
+  'São Paulo, SP',
+  'HYBRID',
+  'SENIOR',
+  'Profissional responsável por garantir a qualidade das soluções desenvolvidas pela Claranet, realizando testes e validações em produtos e serviços antes da implementação, incluindo desenvolvimento de planos de teste, testes automatizados e manuais, e identificação de bugs e falhas.',
+  ARRAY[
+    'Graduação completa em Engenharia, Ciência da Computação, TI ou áreas afins',
+    'Certificações avançadas em QA, automação de testes ou segurança da informação (desejável)',
+    'Inglês avançado',
+    'Liderança em QA e desenvolvimento de estratégias de automação de testes',
+    'Experiência em suporte à alta administração',
+    'Conhecimento em segurança da informação'
+  ],
+  ARRAY[
+    'Automação de Testes',
+    'Testes Manuais',
+    'Planos de Teste',
+    'Segurança da Informação',
+    'Gestão da Qualidade'
+  ],
+  'https://claranet.gupy.io/jobs/11206891'
+);
